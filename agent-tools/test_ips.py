@@ -16,6 +16,7 @@ from pathlib import Path
 
 from text_codec import read_script, read_dialogue
 from build_ips import ROOT, IPS_LIMIT, ips_patch, load_profile, validate_entries, verify_profile
+from build_ips import RESIDENT_NAME_WIDTH, pack_resident_names
 from text_codec import Codec
 from rocket_font import UI_CODE, UI_SOURCE, ASSET, HOOK, HOOK_SIZE, SPACING_HOOK, load_font, font_metrics
 from text_layout import LAYOUTS, READING_CODE, READING_SOURCE, READING_HOOKS
@@ -65,6 +66,17 @@ def apply_ips(original, patch):
 
 
 class IpsFormatTests(unittest.TestCase):
+    def test_resident_names_preserve_original_field_size(self):
+        codec = Codec(ROOT)
+        rows = read_script(ROOT / 'text-dumps/gerb.txt')
+        names = dict(pack_resident_names(rows, codec))
+        self.assertEqual(len(names), 100)
+        for offset, name in ((8197349, 'Margo'), (8197592, 'Helen'), (8197601, 'Korra')):
+            expected = codec.encode_text(name.ljust(RESIDENT_NAME_WIDTH), small=True) + b'\0'
+            self.assertEqual(names[offset], expected)
+        with self.assertRaisesRegex(ValueError, 'resident name must fit'):
+            pack_resident_names([[8197160, ['SMALL', 'Smack Ewan']]], codec)
+
     def test_known_literal_and_rle_examples(self):
         expected = b'PATCH\x00\x00\x03\x00\x04\x00abcEOF'
         self.assertEqual(ips_patch([(3, b'\0abc')]), expected)
@@ -124,6 +136,8 @@ class RomFreeBuildTests(unittest.TestCase):
         for index in self.report['injected_plain_entries']:
             for address in self.profile['plain_text'][f'{index:06x}']['pointers']:
                 expected_slots.update(range(address, address + 4))
+        for offset in self.report['injected_resident_entries']:
+            expected_slots.update(range(offset, offset + RESIDENT_NAME_WIDTH + 1))
         touched, cursor = set(), base
         for offset, payload in read_ips(self.patch):
             if offset < base:

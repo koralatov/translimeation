@@ -22,6 +22,10 @@ from text_layout import (LAYOUTS, READING_CODE, READING_SOURCE, load_layouts,
 ROOT = Path(__file__).resolve().parent.parent
 IPS_LIMIT = 1 << 24
 IPS_EOF_OFFSET = int.from_bytes(b'EOF', 'big')
+RESIDENT_NAME_START = 0x7D1428
+RESIDENT_NAME_COUNT = 100
+RESIDENT_NAME_WIDTH = 8
+RESIDENT_NAME_TABLE = 0x7654E4
 
 
 def sha256(data):
@@ -176,6 +180,30 @@ def verify_profile(rom, profile, slots):
             actual_slots.add(i)
     if slots != actual_slots:
         raise ValueError('Profile dialogue slots differ from the ROM')
+    for resident in range(RESIDENT_NAME_COUNT):
+        offset = RESIDENT_NAME_START + resident * (RESIDENT_NAME_WIDTH + 1)
+        pointer = struct.unpack_from('<I', rom, RESIDENT_NAME_TABLE + 4 * resident)[0]
+        if pointer != profile['gba_base_address'] + offset or rom[offset + RESIDENT_NAME_WIDTH]:
+            raise ValueError('Resident name slots differ from the ROM')
+
+
+def pack_resident_names(rows, codec):
+    """Replace resident names in their original eight-glyph fields."""
+    slot_size = RESIDENT_NAME_WIDTH + 1
+    padding = codec.encode_text(' ', small=True)
+    first = RESIDENT_NAME_START
+    end = first + RESIDENT_NAME_COUNT * slot_size
+    writes = []
+    for index, *tokens in rows:
+        if not first <= index < end or (index - first) % slot_size:
+            continue
+        if len(tokens) != 1 or not isinstance(tokens[0], list) or len(tokens[0]) != 2 or tokens[0][0] != 'SMALL':
+            raise ValueError(f'{index}: expected a SMALL resident name')
+        name = codec.encode_text(tokens[0][1], small=True)
+        if not 0 < len(name) <= RESIDENT_NAME_WIDTH:
+            raise ValueError(f'{index}: resident name must fit in {RESIDENT_NAME_WIDTH} glyphs')
+        writes.append((index, name.ljust(RESIDENT_NAME_WIDTH, padding) + b'\0'))
+    return writes
 
 
 def build(script, output, root=ROOT, verify_rom=None, output_rom=None, automatic_pages=False):
@@ -231,9 +259,12 @@ def build(script, output, root=ROOT, verify_rom=None, output_rom=None, automatic
         raise ValueError('Unaccounted bytes in appended text')
     text_bytes = len(payload)
     menu_offset = base + len(payload)
-    menu_writes, menu, menu_entries = pack_menu_text(read_script(script), profile, codec, menu_offset)
+    rows = read_script(script)
+    menu_writes, menu, menu_entries = pack_menu_text(rows, profile, codec, menu_offset)
     writes.extend(menu_writes)
     payload += menu
+    resident_writes = pack_resident_names(rows, codec)
+    writes.extend(resident_writes)
     payload += bytes((-len(payload)) & 3)
     font_offset = base + len(payload)
     font_writes, font = pack_font(font_offset, profile, glyphs)
@@ -270,6 +301,7 @@ def build(script, output, root=ROOT, verify_rom=None, output_rom=None, automatic
               'text_bytes': text_bytes, 'font_offset': font_offset, 'font_bytes': len(font),
               'menu_offset': menu_offset, 'menu_bytes': len(menu),
               'injected_plain_entries': menu_entries,
+              'injected_resident_entries': [offset for offset, _ in resident_writes],
               'unreferenced_plain_entries': [i for i in menu_entries
                                             if not profile['plain_text'][f'{i:06x}']['pointers']],
               'reading_pause_offset': reading_offset,
