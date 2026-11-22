@@ -55,7 +55,7 @@
 
 (defparameter *textbox-size* 208)
 
-;; note: something special about text 1403 --- might be ducktor cid's crashing line
+;; note: something special about text 1403 --- might be Michel Burrows' crashing line
 
 (defun scan-rom ()
   "Extract all known formats and audit every byte of the text section.
