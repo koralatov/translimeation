@@ -688,7 +688,7 @@
 (738 (NAME "Bubluno") "Entrance to the shrine? Hmm, I don't really get it." (SHOW-PROMPT) (WAIT-INPUT))
 (739 (NAME "Darko") "Huh? " (COLOR 1) "Shellma" (COLOR 0) ", you say?" (NEWLINE) "Yeaaaah, sure beats me." (SHOW-PROMPT) (WAIT-INPUT))
 (740 (NAME "Shellma") "『" (COLOR 1) "Shellma" (COLOR 0) "イベント中の セリフです。" (NEWLINE) "私が " (COLOR 1) "Shellma" (COLOR 0) " そのものです!" (SHOW-PROMPT) (WAIT-INPUT))
-(741 (NAME "Hoozler") "The lighthouse of Ul・Otter River" (NEWLINE) "and our town. Maybe they're related?" (SHOW-PROMPT) (WAIT-INPUT))
+(741 (NAME "Hoozler") "The Ul・Otter River lighthouse" (NEWLINE) "and Kinnaird Head. Are they related?" (SHOW-PROMPT) (WAIT-INPUT))
 (742 (NAME "Bertie Bowie") "Hoo-aye, " (COLOR 1) (PLAYER-NAME) (COLOR 0) ". Fit? The shrine's wee ingang, say ye?" (SHOW-PROMPT) (WAIT-INPUT) (FORCE-NEWLINE) "Haw-haw-haw! Ye'll nae gar a grown chiel swallae sic a wheen o havers, min!" (SHOW-PROMPT) (WAIT-INPUT))
 (743 (NAME "Mrs. Bowie") "Oh, " (COLOR 1) (PLAYER-NAME) (COLOR 0) ", dear. My " (COLOR 1) "Bob Bowie" (COLOR 0) " hasn't come home yet." (SHOW-PROMPT) (WAIT-INPUT) (FORCE-NEWLINE) "What? A shrine? No, I don't know." (SHOW-PROMPT) (WAIT-INPUT))
 (744 (NAME "Goopier") (COLOR 1) "Shellma" (COLOR 0) "?" (NEWLINE) "Hmmmm, I dunno." (SHOW-PROMPT) (WAIT-INPUT))
