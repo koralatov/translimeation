@@ -26,6 +26,10 @@ RESIDENT_NAME_START = 0x7D1428
 RESIDENT_NAME_COUNT = 100
 RESIDENT_NAME_WIDTH = 8
 RESIDENT_NAME_TABLE = 0x7654E4
+TABLET_INKS = {
+    1346: {0}, 1347: {3}, 1348: {1}, 1349: {2}, 1350: {0},
+    1351: {1, 3}, 1352: {2, 3}, 1353: {1, 2}, 1354: {1, 2, 3}, 1355: {0, 1, 2, 3},
+}
 
 
 def sha256(data):
@@ -97,6 +101,51 @@ def validate_entries(entries, slots, codec):
             validate_dialogue(ts, codec)
         except ValueError as exc:
             raise ValueError(f'{i}: {exc}') from exc
+
+
+def validate_tablets(entries, codec, metrics):
+    """Preserve eight aligned lines and the colour masks for the collected pieces."""
+    widths = {glyph: (width, spacing)
+              for first, last, width, spacing in metrics
+              for glyph in range(first, last + 1)}
+    variants = {}
+    for index, *tokens in entries:
+        if index not in TABLET_INKS:
+            continue
+        glyphs, inks = [], []
+        ink, pixels = 0, 0
+        for token in tokens:
+            if token == ['NEWLINE']:
+                glyphs.append(None)
+                inks.append(None)
+                pixels = 0
+            elif isinstance(token, list) and token[0] == 'COLOR':
+                ink = token[1]
+            elif type(token) is str:
+                data = iter(codec.encode_text(token))
+                for byte in data:
+                    glyph = 256 + next(data) if byte == 1 else byte
+                    width, spacing = widths[glyph]
+                    pixels += width + (spacing if pixels else 0)
+                    if pixels > 208 or ink not in TABLET_INKS[index] | {4}:
+                        raise ValueError(f'{index}: tablet text exceeds its field or uses an unavailable ink')
+                    glyphs.append(glyph)
+                    inks.append(ink)
+            else:
+                raise ValueError(f'{index}: tablet text may only contain glyphs, colours, and line breaks')
+        if glyphs.count(None) != 7 or (index in (1346, 1355) and 4 in inks):
+            raise ValueError(f'{index}: tablet text must show eight lines with the expected mask')
+        variants[index] = glyphs, inks
+    if not variants:
+        return
+    reference, full = variants.get(1355, next(iter(variants.values())))
+    for index, (glyphs, inks) in variants.items():
+        if glyphs != reference:
+            raise ValueError(f'{index}: tablet glyphs or line breaks differ between reveal stages')
+        if 1355 in variants and index != 1346:
+            expected = [ink if ink is None or ink in TABLET_INKS[index] else 4 for ink in full]
+            if inks != expected:
+                raise ValueError(f'{index}: tablet reveal mask differs from the collected colours')
 
 
 def pack_menu_text(rows, profile, codec, offset):
@@ -223,10 +272,12 @@ def build(script, output, root=ROOT, verify_rom=None, output_rom=None, automatic
         original = Path(verify_rom).read_bytes()
         verify_profile(original, profile, slots)
     glyphs = load_font(root)
+    metrics_data = font_metrics(profile, glyphs)
+    validate_tablets(entries, codec, metrics_data)
     with tempfile.TemporaryDirectory(prefix='translimeation-ips-') as tmp:
         temp = Path(tmp)
         metrics = temp / 'metrics.txt'
-        metrics.write_text('\n'.join(map(sexp, font_metrics(profile, glyphs))) + '\n')
+        metrics.write_text('\n'.join(map(sexp, metrics_data)) + '\n')
         policies = temp / 'layouts.txt'
         policies.write_text('\n'.join(map(sexp, lisp_layouts(layouts))) + '\n')
         subprocess.run(['sbcl', '--script', str(root / 'tools/build_patch_data.lisp'),

@@ -291,11 +291,12 @@ Returns injectable entries and layout/encoding holds as two values."
           (destructuring-bind (index mode width lines paginate ending)
               (or (assoc (car entry) *text-layouts*) (error "No layout for entry ~D" (car entry)))
             (declare (ignore index))
-            (when (string= mode "fixed") (error "Fixed tablet reveal layout; retain original until separately edited"))
-            (let ((flowed (reflow-string entry :width width :lines-per-page lines
-                                         :paginate (= paginate 1)
-                                         :manual-breaks (not *automatic-pages*)
-                                         :ending (if *automatic-pages* ending 0))))
+            (let ((flowed (if (string= mode "fixed")
+                              entry
+                              (reflow-string entry :width width :lines-per-page lines
+                                            :paginate (= paginate 1)
+                                            :manual-breaks (not *automatic-pages*)
+                                            :ending (if *automatic-pages* ending 0)))))
               (encode-string encoding small (cdr flowed))
               (push flowed passed)))
         (error (e) (push (list (car entry) (princ-to-string e)) failed))))

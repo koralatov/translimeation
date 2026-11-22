@@ -16,7 +16,7 @@ from pathlib import Path
 
 from text_codec import read_script, read_dialogue
 from build_ips import ROOT, IPS_LIMIT, ips_patch, load_profile, validate_entries, verify_profile
-from build_ips import RESIDENT_NAME_WIDTH, pack_resident_names
+from build_ips import RESIDENT_NAME_WIDTH, pack_resident_names, validate_tablets
 from text_codec import Codec
 from rocket_font import UI_CODE, UI_SOURCE, ASSET, HOOK, HOOK_SIZE, SPACING_HOOK, load_font, font_metrics
 from text_layout import LAYOUTS, READING_CODE, READING_SOURCE, READING_HOOKS
@@ -66,6 +66,17 @@ def apply_ips(original, patch):
 
 
 class IpsFormatTests(unittest.TestCase):
+    def test_tablet_layout_requires_matching_reveal_masks(self):
+        profile, _ = load_profile(ROOT)
+        entries = {row[0]: row for row in read_dialogue(ROOT / 'text-dumps/gerb.txt')}
+        tablets = [entries[index] for index in range(1346, 1356)]
+        codec = Codec(ROOT)
+        metrics = font_metrics(profile, load_font(ROOT))
+        validate_tablets(tablets, codec, metrics)
+        damaged = [1347, ['COLOR', 4], *entries[1347][2:]]
+        with self.assertRaisesRegex(ValueError, 'tablet reveal mask'):
+            validate_tablets([damaged, entries[1355]], codec, metrics)
+
     def test_resident_names_preserve_original_field_size(self):
         codec = Codec(ROOT)
         rows = read_script(ROOT / 'text-dumps/gerb.txt')
@@ -153,6 +164,7 @@ class RomFreeBuildTests(unittest.TestCase):
         held = {r['index'] for r in self.report['held_entries']}
         self.assertFalse(included & held)
         self.assertEqual(script_ids, included | held)
+        self.assertTrue(set(range(1346, 1356)) <= included)
         self.assertNotIn(1883, included)  # Credits have another grammar/table.
         self.assertNotIn(1876, included)  # Null pointer slot.
 

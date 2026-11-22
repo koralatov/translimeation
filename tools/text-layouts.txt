@@ -1,6 +1,6 @@
 # Entry/range  layout  ending  required-CUE-count
 # dialogue: automatic reading pages; cued: same, with native scene acknowledgements.
-# choice/static: bounded wrapping, no automatic reading pauses. fixed: retain ROM.
+# choice/static: bounded wrapping, no automatic reading pauses. fixed: verbatim tablet layout.
 # Ending is wait (native acknowledgement), prompt (indicator only), or none.
 # Missing IDs and changed cue counts are errors; no policy is inferred from text.
 # NPC banks 1..8 use the blocking NPC text tasks (0809F33A / 080A6B2C).
