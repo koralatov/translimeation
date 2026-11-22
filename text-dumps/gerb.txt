@@ -1027,7 +1027,7 @@
 (1077 (NAME "Bob") "You're… " (COLOR 1) (PLAYER-NAME) (COLOR 0) ", are ye nae!?" (SHOW-PROMPT) (WAIT-INPUT))
 (1078 (NAME "Bob") "Och, that's richt! The " (COLOR 2) "Mod Rod" (COLOR 0) "… Sorry, did that gie ye a sair dunt?" (SHOW-PROMPT) (WAIT-INPUT) (FORCE-NEWLINE) "Weel, A'm gled ye're safe. If they could get haud o even you…" (SHOW-PROMPT) (WAIT-INPUT) (FORCE-NEWLINE) "Onygoo, let's ging ootbye. We'll see better fit's happened oot there." (SHOW-PROMPT) (WAIT-INPUT))
 (1079 "As predicted, that night, Papa Reg gave " (PLAYER-NAME) " a stern talking to." (SHOW-PROMPT) (WAIT-INPUT))
-(1080 "Boingbroch, the town of the slimes. A fun town, ever peaceful." (SHOW-PROMPT) (WAIT-INPUT) (FORCE-NEWLINE) "Its children so full of vigor too. Another day of scheming." (SHOW-PROMPT) (WAIT-INPUT))
+(1080 "Boingbroch, the town of the slimes and the scurries and the fish. A fun town, ever peaceful." (SHOW-PROMPT) (WAIT-INPUT) (FORCE-NEWLINE) "Its children so full of vigor too. Another day of scheming." (SHOW-PROMPT) (WAIT-INPUT))
 (1081 "And then, the Bluetooners came to town. Just who are those punks anyway?" (SHOW-PROMPT) (WAIT-INPUT) (FORCE-NEWLINE) "First " (PLAYER-NAME) " should head to " (COLOR 2) "Nokke Woods" (COLOR 0) "." (SHOW-PROMPT) (WAIT-INPUT) (FORCE-NEWLINE) "As Bob mentioned, you might learn something there." (SHOW-PROMPT) (WAIT-INPUT))
 (1082 (NAME "Papa Reg") "You will remain a Platypunk until morning. Consider your conduct. We shall discuss it at breakfast." (SHOW-PROMPT) (WAIT-INPUT))
 (1083 "On that peaceful night, the incident happened." (SHOW-PROMPT) (WAIT-INPUT))
