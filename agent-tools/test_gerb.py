@@ -4,7 +4,7 @@ import _paths
 import copy
 import unittest
 
-from text_codec import read_script, read_dialogue
+from text_codec import control_trace, read_script, read_dialogue
 from check_gerb import ROOT, validate, word_boundaries
 
 
@@ -34,20 +34,19 @@ class GerbTests(unittest.TestCase):
         self.assertEqual(list(word_boundaries([['PLAYER-NAME'], ['COLOR', 0], "'s pot"])), [])
         self.assertEqual(list(word_boundaries(['one', ['NEWLINE'], 'two'])), [])
 
-    def test_missing_endings_remain_original_japanese(self):
+    def test_translated_endings_keep_counters_and_pauses(self):
         original = {r[0]: r for r in read_dialogue(ROOT / 'text-dumps/rom.txt')}
         for i in [1522, 1950, 1952, 1964, 1966, 1979, 1981, 1993, 1995, 2007, 2009]:
             with self.subTest(index=i):
                 row, source = self.rows[i], original[i]
                 counter = ['DYNAMIC-TEXT', 0]
-                self.assertEqual(row[row.index(counter) + 1:],
-                                 source[source.index(counter) + 1:])
-        # The unsupported '#' paragraph also retains the source text, rather
-        # than introducing an English replacement word.
-        def third_paragraph(row):
-            waits = [n for n, t in enumerate(row) if t == ['WAIT-INPUT']]
-            return row[waits[1] + 1:waits[2] + 1]
-        self.assertEqual(third_paragraph(self.rows[1574]), third_paragraph(original[1574]))
+                ending = readable(row[row.index(counter):])
+                self.assertRegex(ending, r'^10 (slimes|moah|more)\b')
+                self.assertNotRegex(ending, r'[ぁ-ゖァ-ヺ㐀-鿿]')
+                self.assertEqual(control_trace(row[1:]), control_trace(source[1:]))
+        statue = self.rows[1574]
+        self.assertIn('25, 50, or 100', readable(statue[1:]))
+        self.assertEqual(control_trace(statue[1:]), control_trace(original[1574][1:]))
 
     def test_preview_retains_corrected_spaces_and_counter_endings(self):
         path = ROOT / 'dist/reflowed.txt'
