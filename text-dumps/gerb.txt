@@ -1970,7 +1970,7 @@
 (2035 (NAME "Shellma") "That should be the final tablet, the black tablet." (SHOW-PROMPT) (WAIT-INPUT))
 (2036 (NAME "Shellma") "It has been quite some time since an offering has been made here." (SHOW-PROMPT) (WAIT-INPUT) (FORCE-NEWLINE) "It'll fit right into the pedestals." (SHOW-PROMPT) (WAIT-INPUT) (FORCE-NEWLINE) "And if it did not..." (SHOW-PROMPT) (WAIT-INPUT))
 (2037 (NAME "Shellma") "What? Don't worry." (SHOW-PROMPT) (WAIT-INPUT))
-(2038 (NAME "Shellma") "You best bring the remaining tablets here." (SHOW-PROMPT) (WAIT-INPUT) (FORCE-NEWLINE) "If we look at all three combined, the mystery will be solved." (SHOW-PROMPT) (WAIT-INPUT))
+(2038 (NAME "Shellma") "You best bring the remaining tablets here." (SHOW-PROMPT) (WAIT-INPUT) (FORCE-NEWLINE) "Read it with the other three and we'll solve the mystery." (SHOW-PROMPT) (WAIT-INPUT))
 (2039 (NAME "Shellma") "Okay then, now that's settled, Call " (COLOR 1) "Flanpa" (COLOR 0) " and the others, hmm?" (SHOW-PROMPT) (WAIT-INPUT) (FORCE-NEWLINE) "I will wait here." (SHOW-PROMPT) (WAIT-INPUT))
 (2042 (NAME "Flanpa") "Ohh, this is it, it's here. Sorry to keep you waiting." (SHOW-PROMPT) (WAIT-INPUT))
 (2043 (NAME "Flanpa") "Now, with that, shall we take a look at the last tablet?" (SHOW-PROMPT) (WAIT-INPUT))
