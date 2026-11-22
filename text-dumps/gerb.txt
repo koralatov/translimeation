@@ -975,7 +975,7 @@
 (1025 (NAME "Muddy hand") "I've always been, up until now, ready to give a helping hand!!" (SHOW-PROMPT) (WAIT-INPUT))
 (1026 (NAME "Mummy") "Bandages… It's about time… I cleaned them… Yeah?" (SHOW-PROMPT) (WAIT-INPUT))
 (1027 (NAME "GRUG") "GIGA～ " (COLOR 1) (PLAYER-NAME) (COLOR 0) ". Watch out that you don't get in too deep." (SHOW-PROMPT) (WAIT-INPUT))
-(1028 (NAME "Plackie") "Welcome to the まもの堂!" (NEWLINE) "That's what a shopkeep would say, yeah?" (SHOW-PROMPT) (WAIT-INPUT))
+(1028 (NAME "Plackie") "Welcome to the Monster Mart!" (NEWLINE) "That's what a shopkeep would say, yeah?" (SHOW-PROMPT) (WAIT-INPUT))
 (1029 (NAME "Jinx") "The chimera won't dance to my jester's rap." (SHOW-PROMPT) (WAIT-INPUT))
 (1030 (NAME "Chimera") "Hello, " (COLOR 1) (PLAYER-NAME) (COLOR 0) "! I've decided that I'm going to nest here from now!" (SHOW-PROMPT) (WAIT-INPUT))
 (1031 (NAME "Living statue") "My job now is…… to guard the shop……" (SHOW-PROMPT) (WAIT-INPUT))
