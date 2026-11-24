@@ -1,6 +1,6 @@
 スーランの城下町＞Boingbroch
 『スーラン』>The Esplanade Café (in-game: The Esplanade Cafe)
-Boingbroch offshore lighthouse＞Kinnaird Head lighthouse
+Boingbroch offshore lighthouse＞Kinnaird Head Lighthouse
 Philorth Water lighthouse＞Rattray Head Lighthouse
 Boingbroch Beach＞Tiger Hill Beach
 Beach house＞The Fisher's Hoosie (home of The Esplanade Café)
@@ -45,13 +45,13 @@ Nikomisky Well＞Tyrie Well
 
 すっとび調査団＞Goonin
 しっぽ団＞the Bluetooners
-しっぽ団の 四天玉＞the 4 Plobsters?
+しっぽ団の 四天玉＞the four Bluetooner bosses
 まもの堂＞Monster Mart
 テキ屋＞Foerena (it's a battle arena enemy + shop)
 
 しあわせの木＞Fortuitree
 
-アンダの ズラ・ストッキング＞ (this is just a slime mispronouncing "your" and "Elastoblast")
+アンダの ズラ・ストッキング＞Bubsy says "ya Elongoo Blast" (the original also mispronounces the move name)
 
 スッカ-＞Flanball
 Flanball pitch＞Bellslea Flanball pitch
@@ -64,7 +64,7 @@ Flanball stadium＞Bellslea Flanball stadium
 
 メラゾマ (volcano)＞Mormond Hill
 
-ナイスト＞Elastrike (port-manteau of ナイスストライク "nice strike" sort of like "famicom". this is when you elasto blast passed platypunks earning nice strike points. Elastoblast's localisation does not quite fit into the football terminology of a "strike")
+ナイスト＞Elastrike (port-manteau of ナイスストライク "nice strike" sort of like "famicom". this is when you elasto blast passed platypunks earning nice strike points. Elasto Blast's localisation does not quite fit into the football terminology of a "strike")
 ナイポイ＞Elaspoint (port-manteau of ナイスポイント "nice strike points", this accumulates during flanball and will be added to the score on a goal)
 
 スラしょうりゅう＞Slashouryuu = Shoryuflan = street fighter reference (this is probably a debug/hidden name)
